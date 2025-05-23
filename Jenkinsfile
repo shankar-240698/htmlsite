@@ -6,6 +6,7 @@ pipeline {
         IMAGE_TAG = 'latest'
         KUBECONFIG_PATH = '/home/jenkins/.kube/config'
         CLUSTER_NAME = 'eks-cluster'
+        DOCKERHUB_CREDENTIALS = 'dockerhub-creds'
     }
 
     stages {
