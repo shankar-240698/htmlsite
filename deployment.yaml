@@ -1,16 +1,16 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: basic-html-app
+  name: htmlpage
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: basic-html-app
+      app: htmlpage
   template:
     metadata:
       labels:
-        app: basic-html-app
+        app: htmlpage
     spec:
       containers:
       - name: basic-html-app
@@ -21,11 +21,11 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: html-app
+  name: htmlpage
 spec:
   type: LoadBalancer
   ports:
   - port: 80
     targetPort: 80
   selector:
-    app: basic-html-app
+    app: htmlpage
