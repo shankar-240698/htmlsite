@@ -3,7 +3,7 @@ pipeline {
 
     environment {
         DOCKERHUB_CREDENTIALS = 'dockerhub-creds'  // Jenkins credentials ID for Docker Hub
-        IMAGE_NAME = 'mssankar/htmlpage'
+        IMAGE_NAME = 'msshankar/htmlpage'
         IMAGE_TAG = 'latest'
         KUBECONFIG_PATH = '/home/jenkins/.kube/config'  // Path to kubeconfig on Jenkins agent
     }
