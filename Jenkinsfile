@@ -2,54 +2,47 @@ pipeline {
     agent any
 
     environment {
-        DOCKERHUB_CREDENTIALS = 'dockerhub-creds'  // Jenkins credentials ID for Docker Hub
-        IMAGE_NAME = 'msshankar/htmlpage'
-        IMAGE_TAG = 'latest'
-        KUBECONFIG_PATH = '/home/jenkins/.kube/config'  // Path to kubeconfig on Jenkins agent
+        IMAGE_NAME = 'mssankar/htmlpage:latest'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+                git 'https://github.com/shankar-240698/htmlsite.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    dockerImage = docker.build("${IMAGE_NAME}:${IMAGE_TAG}")
-                }
+                sh 'docker build -t $IMAGE_NAME .'
             }
         }
 
         stage('Push to Docker Hub') {
             steps {
-                script {
-                    docker.withRegistry('https://registry.hub.docker.com', DOCKERHUB_CREDENTIALS) {
-                        dockerImage.push()
-                    }
+                withDockerRegistry([ credentialsId: 'dockerhub-creds', url: 'https://registry.hub.docker.com' ]) {
+                    sh 'docker push $IMAGE_NAME'
                 }
             }
         }
 
         stage('Deploy to EKS') {
             steps {
-                script {
-                    // Use kubectl with kubeconfig to deploy the app
-                    sh """
-                    export KUBECONFIG=${KUBECONFIG_PATH}
+                withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: 'aws-creds']]) {
+                    sh '''
+                    export AWS_ACCESS_KEY_ID=$AWS_ACCESS_KEY_ID
+                    export AWS_SECRET_ACCESS_KEY=$AWS_SECRET_ACCESS_KEY
+                    export KUBECONFIG=/home/jenkins/.kube/config
+
+                    aws eks --region us-west-2 update-kubeconfig --name eks-cluster
                     kubectl apply -f deployment.yaml
-                    """
+                    '''
                 }
             }
         }
     }
 
     post {
-        success {
-            echo 'Deployment successful!'
-        }
         failure {
             echo 'Build or deployment failed.'
         }
