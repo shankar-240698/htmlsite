@@ -8,7 +8,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                git 'https://github.com/shankar-240698/htmlsite.git'
+                checkout scm
             }
         }
 
