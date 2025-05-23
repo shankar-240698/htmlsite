@@ -14,7 +14,7 @@ spec:
     spec:
       containers:
       - name: basic-html-app
-        image: mssankar/htmlpage:latest
+        image: msshankar/htmlpage:latest
         ports:
         - containerPort: 80
 ---
