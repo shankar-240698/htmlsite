@@ -1,0 +1,31 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: basic-html-app
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: basic-html-app
+  template:
+    metadata:
+      labels:
+        app: basic-html-app
+    spec:
+      containers:
+      - name: basic-html-app
+        image: mssankar/htmlpage:latest
+        ports:
+        - containerPort: 80
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: html-app
+spec:
+  type: LoadBalancer
+  ports:
+  - port: 80
+    targetPort: 80
+  selector:
+    app: basic-html-app
