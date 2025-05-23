@@ -3,7 +3,6 @@ pipeline {
 
     environment {
         IMAGE_NAME = 'msshankar/htmlpage'
-        IMAGE_NAME = 'msshankar/htmlpage'
         IMAGE_TAG = 'latest'
         KUBECONFIG_PATH = '/home/jenkins/.kube/config'
         CLUSTER_NAME = 'eks-cluster'
